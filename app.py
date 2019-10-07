@@ -5,8 +5,8 @@ from AOM_MODELS import AOM_procedures as SP,AOM_tables as T
 from flask_restplus import Resource, Api, fields, reqparse
 
 #creates an instance of the Api class from the flask_restplus extension
-api = Api(app,vRecursion='1.0', title='This Is WEMA AOM Swagger Documentations', 
-          description='WEMA AOM')
+api = Api(app,vRecursion='1.0', title='This Is Meedra_API Swagger Documentations', 
+          description='Meedra API')
 
 
 
