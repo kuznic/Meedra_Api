@@ -1,0 +1,225 @@
+-- MySQL Workbench Forward Engineering
+
+SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
+SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
+SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION';
+
+-- -----------------------------------------------------
+-- Schema mydb
+-- -----------------------------------------------------
+-- -----------------------------------------------------
+-- Schema aom
+-- -----------------------------------------------------
+
+-- -----------------------------------------------------
+-- Schema aom
+-- -----------------------------------------------------
+CREATE SCHEMA IF NOT EXISTS `aom` DEFAULT CHARACTER SET latin1 COLLATE latin1_general_ci ;
+USE `aom` ;
+
+-- -----------------------------------------------------
+-- Table `aom`.`tbl_avg_withdrawal_info`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `aom`.`tbl_avg_withdrawal_info` (
+  `terminal_id` CHAR(8) NULL DEFAULT NULL,
+  `withdrawal_amount` FLOAT NULL DEFAULT NULL,
+  `withdrawal_count_hr` INT(11) NULL DEFAULT NULL,
+  `withdrawal_day` VARCHAR(8) NULL DEFAULT NULL,
+  `withdrawal_hr` VARCHAR(8) NULL DEFAULT NULL)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = latin1
+COLLATE = latin1_general_ci;
+
+
+-- -----------------------------------------------------
+-- Table `aom`.`tbl_support_event_message_template`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `aom`.`tbl_support_event_message_template` (
+  `event_id` INT(11) NOT NULL,
+  `event_description` VARCHAR(1000) NULL DEFAULT NULL)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = latin1
+COLLATE = latin1_general_ci;
+
+
+-- -----------------------------------------------------
+-- Table `aom`.`tbl_terminal`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `aom`.`tbl_terminal` (
+  `terminal_id` CHAR(8) CHARACTER SET 'latin1' COLLATE 'latin1_general_ci' NOT NULL,
+  `terminal_name` VARCHAR(20) CHARACTER SET 'latin1' COLLATE 'latin1_general_ci' NULL DEFAULT NULL,
+  `terminal_location` CHAR(40) CHARACTER SET 'latin1' COLLATE 'latin1_general_ci' NULL DEFAULT NULL,
+  PRIMARY KEY (`terminal_id`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = latin1
+COLLATE = latin1_general_ci;
+
+
+-- -----------------------------------------------------
+-- Table `aom`.`tbl_terminal_avg_with_rate`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `aom`.`tbl_terminal_avg_with_rate` (
+  `terminal_id` CHAR(8) NULL DEFAULT NULL,
+  `withdrawal_rate_per_hr` INT(11) NULL DEFAULT NULL,
+  `withdrawal_hr` VARCHAR(8) NULL DEFAULT NULL,
+  `withdrawal_day` VARCHAR(8) NULL DEFAULT NULL)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = latin1
+COLLATE = latin1_general_ci;
+
+
+-- -----------------------------------------------------
+-- Table `aom`.`tbl_terminal_cash_info`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `aom`.`tbl_terminal_cash_info` (
+  `terminal_id` CHAR(8) NOT NULL,
+  `terminal_media_combo` VARCHAR(100) NULL DEFAULT NULL,
+  `terminal_media_balance` FLOAT NULL DEFAULT NULL,
+  `terminal_media_total` FLOAT NULL DEFAULT NULL,
+  PRIMARY KEY (`terminal_id`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = latin1
+COLLATE = latin1_general_ci;
+
+
+-- -----------------------------------------------------
+-- Table `aom`.`tbl_terminal_downtime`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `aom`.`tbl_terminal_downtime` (
+  `terminal_id` CHAR(8) NOT NULL,
+  `downtime` DATETIME NULL DEFAULT NULL,
+  PRIMARY KEY (`terminal_id`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = latin1
+COLLATE = latin1_general_ci;
+
+CREATE UNIQUE INDEX `terminal_id_UNIQUE` ON `aom`.`tbl_terminal_downtime` (`terminal_id` ASC) VISIBLE;
+
+
+-- -----------------------------------------------------
+-- Table `aom`.`tbl_terminal_mode`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `aom`.`tbl_terminal_mode` (
+  `terminal_id` CHAR(8) CHARACTER SET 'latin1' COLLATE 'latin1_general_ci' NULL DEFAULT NULL,
+  `terminal_mode` VARCHAR(15) CHARACTER SET 'latin1' COLLATE 'latin1_general_ci' NULL DEFAULT NULL,
+  CONSTRAINT `FK_tbl_teminal_mode_tbl_terminal`
+    FOREIGN KEY (`terminal_id`)
+    REFERENCES `aom`.`tbl_terminal` (`terminal_id`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = latin1
+COLLATE = latin1_general_ci;
+
+CREATE INDEX `FK_tbl_teminal_mode_tbl_terminal_idx` ON `aom`.`tbl_terminal_mode` (`terminal_id` ASC) VISIBLE;
+
+-- -----------------------------------------------------
+-- Table `aom`.`job_run_time`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `aom`.`job_run_time`(
+  
+`time_stamp` datetime DEFAULT NULL
+) 
+ENGINE=InnoDB 
+DEFAULT CHARSET=latin1 
+COLLATE=latin1_general_ci;
+
+-- -----------------------------------------------------
+-- Table `aom`.`job_run_time_hourly`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `aom`.`job_run_time_hourly`(
+  
+`time_stamp` datetime DEFAULT NULL
+) 
+ENGINE=InnoDB 
+DEFAULT CHARSET=latin1 
+COLLATE=latin1_general_ci;
+
+
+-- -----------------------------------------------------
+-- Table `aom`.`tbl_terminal_support_events`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `aom`.`tbl_terminal_support_events` (
+  `terminal_id` CHAR(8) NULL DEFAULT NULL,
+  `terminal_name` VARCHAR(50) NULL DEFAULT NULL,
+  `event_id` INT(11) NULL DEFAULT NULL,
+  `severity` VARCHAR(20) NULL DEFAULT NULL,
+  `date_time` DATETIME NULL DEFAULT NULL)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = latin1
+COLLATE = latin1_general_ci;
+
+
+-- -----------------------------------------------------
+-- Table `aom`.`tbl_terminal_withdrawal_info`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `aom`.`tbl_terminal_withdrawal_info` (
+  `terminal_id` CHAR(8) CHARACTER SET 'latin1' COLLATE 'latin1_general_ci' NULL DEFAULT NULL,
+  `withdrawal_amount` FLOAT NULL DEFAULT NULL,
+  `withdrawal_time` DATETIME NULL DEFAULT NULL,
+  CONSTRAINT `FK_tbl_terminal_withdrawal_info_tbl_terminal`
+    FOREIGN KEY (`terminal_id`)
+    REFERENCES `aom`.`tbl_terminal` (`terminal_id`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = latin1
+COLLATE = latin1_general_ci;
+
+CREATE INDEX `FK_tbl_terminal_withdrawal_info_tbl_terminal_idx` ON `aom`.`tbl_terminal_withdrawal_info` (`terminal_id` ASC) VISIBLE;
+
+USE `aom` ;
+
+-- -----------------------------------------------------
+-- procedure sp_terminal_events
+-- -----------------------------------------------------
+
+DELIMITER $$
+USE `aom`$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_terminal_events`(in terminal int)
+BEGIN
+
+declare term_id int;
+
+set term_id = terminal;
+
+select terminal_id, terminal_name,TS.event_id, replace(TE.event_description,'\t','') as event_description,severity,date_time from tbl_terminal_support_events as TS
+join tbl_support_event_message_template as TE
+on TS.event_id = TE.event_id
+where terminal_id =term_id;
+END$$
+
+DELIMITER ;
+
+-- -----------------------------------------------------
+-- procedure sp_terminal_health_summary
+-- -----------------------------------------------------
+
+DELIMITER $$
+USE `aom`$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_terminal_health_summary`(in terminal int,in time_from varchar(25), in time_to VARCHAR(25))
+BEGIN
+
+declare term_id int;
+declare time_f varchar(25);
+declare time_t VARCHAR(25);
+
+set term_id = terminal;
+set time_f = time_from;
+set time_t = time_to;
+
+
+select T.terminal_id as terminal_ID, T.terminal_name as Terminal_name, 
+IFNULL(NULLIF(TD.downtime,NULL),'No downtime between selected period') as last_offline_time, 
+TW.withdrawal_rate_per_hr as current_cash_withdrawal_rate, 
+CONCAT(TW.withdrawal_day,' ', TW.withdrawal_hr) AS withdrawal_rate_date 
+ from tbl_terminal as T
+LEFT join tbl_terminal_downtime as TD on T.terminal_id = TD.terminal_id
+LEFT join tbl_terminal_avg_with_rate as TW on T.terminal_id = TW.terminal_id
+where T.terminal_id=term_id and CONCAT(TW.withdrawal_day,' ', TW.withdrawal_hr) between time_from and time_to;
+
+
+
+END$$
+
+DELIMITER ;
+
+SET SQL_MODE=@OLD_SQL_MODE;
+SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
+SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
